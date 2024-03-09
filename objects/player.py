@@ -1,29 +1,27 @@
 import pygame
+from objects.PhysicsObject import PhysicsObject
+from pygame.math import Vector2
 from pygame.locals import (
     K_w
 )
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos):
+    physics: PhysicsObject
+
+    def __init__(self, pos: Vector2):
         super(Player, self).__init__()
+
+        # visual
         self.image = pygame.image.load("assets/stick.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (50, 50))
-        self.rect = self.image.get_rect()
-        self.rect.move_ip(pos)
-        self.v_x = 0
 
-    def update(self, keys, key_events):
-        for event in key_events:
-            if event.key == K_w:
-                self.v_x -= 60
-        self.v_x += 1
-        move_x = 0
-        move_y = self.v_x
-        if keys[pygame.K_d]:
-            move_x += 5
-        if keys[pygame.K_a]:
-            move_x -= 5
-        if self.rect.bottom > 487:
-            self.v_x = 0
-            self.rect.bottom = 487
-        self.rect.move_ip((move_x, move_y))
+        # physics and display
+        self.physics = PhysicsObject(pos)
+        self.rect = self.image.get_rect()
+        self.rect.move_ip(*self.physics.pos)
+
+    def update(self, dt: float, keys, key_events):
+        forces: list[Vector2] = []
+        forces.append(Vector2(0, 0.5))
+        self.physics.update(dt, forces)
+        self.rect.move_ip(*self.physics.pos)
