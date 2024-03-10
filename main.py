@@ -48,7 +48,7 @@ while running:
         y = GROUND_Y
         jump_speed = 0
 
-    character.update(pygame.key.get_pressed(), key_events)
+    character.update(1/60, pygame.key.get_pressed(), key_events)
     all_sprites.draw(screen)
     # screen.blit(character.surf, (x, y))
     # screen.blit(floor.surf, floor.rect)
