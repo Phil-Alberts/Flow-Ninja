@@ -1,6 +1,6 @@
 from pygame.math import Vector2
 
-class PhysicsObject:
+class Physics:
     pos: Vector2
     vel: Vector2
     acc: Vector2
@@ -26,8 +26,3 @@ class PhysicsObject:
         self.vel += self.acc * dt
         self.pos += self.vel * dt
         return (d_pos, d_vel, d_acc)
-        # return (self.acc, self.vel, self.pos)
-        # print(self.pos)
-        # for force in forces:
-        #     self.vel += force * dt
-        
