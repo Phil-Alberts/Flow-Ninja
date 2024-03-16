@@ -1,12 +1,12 @@
 import pygame
 from objects.Physics import Physics
+from objects.SpriteWithPhysics import SpriteWithPhysics
 from pygame.math import Vector2
 from pygame.locals import (
     K_w
 )
 
-class Player(pygame.sprite.Sprite):
-    physics: Physics
+class Player(SpriteWithPhysics):
 
     def __init__(self, pos: Vector2):
         super(Player, self).__init__()
@@ -16,14 +16,10 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (50, 50))
 
         # physics and display
-        self.physics = Physics(Vector2(0, 0))
+        self.physics = Physics(pos)
         self.rect = self.image.get_rect()
         self.rect.move_ip(*self.physics.pos)
 
     def update(self, events):
-        # forces: list[Vector2] = []
-        # forces.append(Vector2(0, 1000))
-        # pos, vel, acc = self.physics.update(dt, forces)
-        # print(pos.x, pos.y)
-        x, y = self.physics.pos
-        self.rect.move_ip(x, y)
+        self.rect.center = self.physics.pos
+        print(self.physics.vel)

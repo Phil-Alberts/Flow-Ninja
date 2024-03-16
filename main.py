@@ -1,5 +1,4 @@
 import pygame
-from vector import Vector
 from objects import Player, Floor
 from objects.PhysicsEngine import PhysicsEngine
 pygame.init()
@@ -7,7 +6,7 @@ pygame.init()
 FPS = 60
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-CHARACTER_INIT_POS = (30, 0)
+CHARACTER_INIT_POS = pygame.math.Vector2(50, 0)
 GROUND_Y = 480
 
 

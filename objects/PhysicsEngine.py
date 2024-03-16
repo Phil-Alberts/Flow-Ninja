@@ -5,8 +5,10 @@ import pygame
 
 class PhysicsEngine:
   objects: list[SpriteWithPhysics] = []
+  default_gravity: float
 
-  def __init__(self) -> None:
+  def __init__(self, default_gravity = 100.0) -> None:
+    self.default_gravity = default_gravity
     pass
 
   def register_object(self, object: SpriteWithPhysics):
@@ -22,7 +24,6 @@ class PhysicsEngine:
         continue
 
       forces: list[Vector2] = []
-      forces.append(Vector2(0, 1000))
+      forces.append(Vector2(0, self.default_gravity))
       obj.physics.update(dt, forces)
       obj.update(events)
-      print('updating object')
