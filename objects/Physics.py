@@ -14,6 +14,12 @@ class Physics:
         self.mass = mass
         self.gravity_impact = gravity_impact
     
+    def get_values(self) -> tuple[Vector2, Vector2, Vector2]:
+        return (self.pos, self.vel, self.acc)
+
+    def update_values(pos: Vector2, vel: Vector2, acc: Vector2):
+        pass
+
     def update(self, dt: float, forces: list[Vector2] = []):
         acc_sum = Vector2()
         for force in forces:

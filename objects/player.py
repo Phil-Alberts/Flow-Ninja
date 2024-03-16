@@ -20,9 +20,10 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.move_ip(*self.physics.pos)
 
-    def update(self, dt: float, keys, key_events):
-        forces: list[Vector2] = []
-        forces.append(Vector2(0, 1000))
-        pos, vel, acc = self.physics.update(dt, forces)
-        print(pos.x, pos.y)
-        self.rect.move_ip(pos.x, pos.y)
+    def update(self, events):
+        # forces: list[Vector2] = []
+        # forces.append(Vector2(0, 1000))
+        # pos, vel, acc = self.physics.update(dt, forces)
+        # print(pos.x, pos.y)
+        x, y = self.physics.pos
+        self.rect.move_ip(x, y)
