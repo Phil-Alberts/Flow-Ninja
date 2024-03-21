@@ -4,6 +4,9 @@ class Physics:
     pos: Vector2
     vel: Vector2
     acc: Vector2
+    prev_pos: Vector2 = Vector2(0, 0)
+    prev_vel: Vector2 = Vector2(0, 0)
+    prev_acc: Vector2 = Vector2(0, 0)
     mass: float
     gravity_impact: float
 
@@ -17,10 +20,19 @@ class Physics:
     def get_values(self) -> tuple[Vector2, Vector2, Vector2]:
         return (self.pos, self.vel, self.acc)
 
-    def update_values(pos: Vector2, vel: Vector2, acc: Vector2):
+    def update_values(self, pos: Vector2, vel: Vector2, acc: Vector2):
         pass
 
+    def set_to_previous(self):
+        self.pos = self.prev_pos
+        self.vel = self.prev_vel
+        self.acc = self.prev_acc
+
     def update(self, dt: float, forces: list[Vector2] = []):
+        # just stop the objects when they collide
+        self.prev_pos = Vector2(self.pos)
+        self.prev_vel = Vector2(self.vel)
+        self.prev_acc = Vector2(self.acc)
         acc_sum = Vector2()
         for force in forces:
             acc_sum += force / self.mass

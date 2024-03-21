@@ -23,8 +23,8 @@ class Player(SpriteWithPhysics):
 
     def update(self, events):
         for event in events:
-            print(event)
-            # if event['type'] == 'collision' and self in event['actors']:
-            #     # do collision things
-            #     print("we're colliding!")
+            if event['type'] == 'collision' and self in event['actors']:
+                # do collision things
+                self.physics.set_to_previous()
+                print("we're colliding!")
         self.rect.center = self.physics.pos

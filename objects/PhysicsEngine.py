@@ -17,8 +17,8 @@ class PhysicsEngine:
   
   def update_entities(self, dt: float, keys_pressed: pygame.key.ScancodeWrapper, key_events):
     # loop through objects and develop expected position
-    #  record any events that should happen
-    # loop through objects and publish events
+    # loop back through and do collision detection
+    # loop through and publish events
     events = []
     sprites = self.objects.sprites()
     for obj in sprites:
