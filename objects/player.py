@@ -7,6 +7,7 @@ from pygame.locals import (
 )
 
 class Player(SpriteWithPhysics):
+    collision = True
 
     def __init__(self, pos: Vector2):
         super(Player, self).__init__()
@@ -21,5 +22,9 @@ class Player(SpriteWithPhysics):
         self.rect.move_ip(*self.physics.pos)
 
     def update(self, events):
+        for event in events:
+            print(event)
+            # if event['type'] == 'collision' and self in event['actors']:
+            #     # do collision things
+            #     print("we're colliding!")
         self.rect.center = self.physics.pos
-        print(self.physics.vel)

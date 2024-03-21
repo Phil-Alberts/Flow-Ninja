@@ -4,10 +4,12 @@ from pygame.sprite import Group
 
 class SpriteWithPhysics(sprite.Sprite):
   physics: Physics
+  collision: bool
   rect: rect.Rect
 
   def __init__(self, *groups: Group) -> None:
     super().__init__(*groups)
 
-  def update(self, pos: math.Vector2, events):
-    self.rect.move_ip(pos.x, pos.y)
+  def update(self, events):
+    if self.physics is not None:
+      self.rect.center = self.physics.pos
