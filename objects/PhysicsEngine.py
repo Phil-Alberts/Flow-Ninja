@@ -26,7 +26,7 @@ class PhysicsEngine:
         continue
 
       forces: list[Vector2] = []
-      forces.append(self.default_gravity)
+      forces.append(self.default_gravity * obj.physics.gravity_impact)
       obj.physics.update(dt, forces)
 
     # find any collisions
@@ -40,7 +40,7 @@ class PhysicsEngine:
           # detect collision
           collide = obj1.rect.colliderect(obj2.rect)
           if collide:
-            # calculate angle of collision
+            # emit the event - individual sprites will be responsible for modifying physics based on events
             events.append({'type': 'collision', 'actors': [obj1, obj2]})
     
     for obj in sprites:
