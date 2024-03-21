@@ -1,11 +1,12 @@
 from pygame import sprite, math, rect
 from objects.Physics import Physics
 from pygame.sprite import Group
+from objects.ExtendedRectangle import ExtendedRectangle
 
 class SpriteWithPhysics(sprite.Sprite):
   physics: Physics
   collision: bool
-  rect: rect.Rect
+  rect: ExtendedRectangle
 
   def __init__(self, *groups: Group) -> None:
     super().__init__(*groups)

@@ -25,7 +25,7 @@ engine.register_object(character)
 engine.register_object(floor)
 
 running = True
-frame_advance = False 
+frame_advance = False
 while running:
 
     key_events = []

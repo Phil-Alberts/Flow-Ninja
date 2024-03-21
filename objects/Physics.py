@@ -20,8 +20,10 @@ class Physics:
     def get_values(self) -> tuple[Vector2, Vector2, Vector2]:
         return (self.pos, self.vel, self.acc)
 
-    def update_values(self, pos: Vector2, vel: Vector2, acc: Vector2):
-        pass
+    def update_values(self, pos: Vector2 = None, vel: Vector2 = None, acc: Vector2 = None):
+        if pos is not None: self.pos = pos
+        if vel is not None: self.vel = vel
+        if acc is not None: self.acc = acc
 
     def set_to_previous(self):
         self.pos = self.prev_pos
