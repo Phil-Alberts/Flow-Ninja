@@ -5,7 +5,8 @@ from objects.ExtendedRectangle import ExtendedRectangle
 
 class SpriteWithPhysics(sprite.Sprite):
   physics: Physics
-  collision: bool
+  collision: bool = True
+  fixed: bool = False
   rect: ExtendedRectangle
 
   def __init__(self, *groups: Group) -> None:

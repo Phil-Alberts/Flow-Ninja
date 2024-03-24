@@ -8,7 +8,6 @@ from pygame.locals import (
 )
 
 class Player(SpriteWithPhysics):
-    collision = True
 
     def __init__(self, pos: Vector2):
         super(Player, self).__init__()
@@ -33,6 +32,6 @@ class Player(SpriteWithPhysics):
 
 
                 # assume the object is a rectangle, calculate next vel
-                print("we're colliding!", other)
+                print("we're colliding!", event)
 
         self.rect.center = self.physics.pos

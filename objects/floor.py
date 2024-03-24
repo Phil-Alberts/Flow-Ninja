@@ -5,7 +5,7 @@ from objects.Physics import Physics
 from objects.ExtendedRectangle import ExtendedRectangle
 
 class Floor(SpriteWithPhysics):
-    collision = True
+    fixed = True
     def __init__(self, rect: pygame.rect.Rect):
         super(Floor, self).__init__()
         self.physics = Physics(Vector2(rect.x, rect.y), Vector2(0, 0), Vector2(0, 0), gravity_impact=0)

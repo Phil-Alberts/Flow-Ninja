@@ -1,3 +1,4 @@
+
 from pygame.math import Vector2
 from pygame.sprite import Group
 from objects.Physics import Physics
@@ -17,21 +18,32 @@ class PhysicsEngine:
   #   if not colliding:
   #     return None
 
-  def _intersect_polygons(self, verticesA: list[Vector2], verticesB: list[Vector2]):
+  # determines whether the polygons collide and returns the depth and normal axis
+  def _intersect_polygons(self, verticesA: list[Vector2], verticesB: list[Vector2]) -> tuple[float, Vector2]:
+    depth: float = None
+    normal: Vector2 = None
     for vertList in [verticesA, verticesB]:
       for i in range(len(vertList)):
         va = vertList[i]
         vb = vertList[(i + 1) % len(vertList)]
         
         edge = vb - va
-        normal = Vector2(-edge.y, edge.x)
+        axis = Vector2(-edge.y, edge.x)
 
-        minA, maxA = self._project_vertices(verticesA, normal)
-        minB, maxB = self._project_vertices(verticesB, normal)
+        minA, maxA = self._project_vertices(verticesA, axis)
+        minB, maxB = self._project_vertices(verticesB, axis)
 
         if minA >= maxB or minB >= maxA:
-          return False
-    return True
+          return (0, None)
+        
+        axisDepth = min([maxB - minA, maxA - minB])
+        if depth is None or axisDepth < depth:
+          depth = axisDepth
+          normal = axis
+    # normalize depth and normal vector to be the correct depth in the right direction
+    depth = depth / normal.magnitude()
+    normal = normal.normalize()
+    return (depth, normal)
 
   def _project_vertices(self, vertices: list[Vector2], axis: Vector2) -> tuple[float, float]:
     min: float = None
@@ -40,7 +52,7 @@ class PhysicsEngine:
       proj = vertex.dot(axis)
       if min is None or proj < min:
         min = proj
-      if max is None or proj < max:
+      if max is None or proj > max:
         max = proj
     return (min, max)
   
@@ -72,14 +84,26 @@ class PhysicsEngine:
 
         if obj1.physics is not None:
           # detect collision
-          collide = obj1.rect.colliderect(obj2.rect)
-          # collide = self._intersect_polygons(
-          #     [Vector2(obj1.rect.topleft), Vector2(obj1.rect.topright), Vector2(obj1.rect.bottomright), Vector2(obj1.rect.bottomleft)],
-          #     [Vector2(obj1.rect.topleft), Vector2(obj1.rect.topright), Vector2(obj1.rect.bottomright), Vector2(obj1.rect.bottomleft)]
-          #   )
-          if collide:
-            # emit the event - individual sprites will be responsible for modifying physics based on events
-            events.append({'type': 'collision', 'actors': [obj1, obj2]})
-    
+          # collide = obj1.rect.colliderect(obj2.rect)
+          dist, dir = self._intersect_polygons(
+              obj1.rect.get_vertices(),
+              obj2.rect.get_vertices()
+            )
+          
+          # if we are some distance inside of the object (i.e. we have collided)
+          if dist > 0:
+            # emit the event so that objects are aware of collision
+            events.append({ 'type': 'collision', 'actors': [obj1, obj2], 'intersect_depth': dist, 'direction': dir })
+            # physics engine will handle collision logic here before the event is read by the objects
+
+            if obj1.fixed:
+              obj2.physics.pos += dir * dist
+            elif obj2.fixed:
+              obj1.physics.pos -= dir * dist
+            else:
+              # ratio = obj1.physics.mass / obj2.physics.mass
+              obj1.physics.pos -= dir * dist / 2
+              obj2.physics.pos += dir * dist / 2
+
     for obj in sprites:
       obj.update(events)
